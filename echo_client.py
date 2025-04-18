@@ -1,15 +1,15 @@
 import socket
 
-def send_message(message, host='127.0.0.1', port=12345):
-    with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as client_socket:
-        client_socket.connect((host, port))
-        client_socket.sendall(message.encode())
-        response = client_socket.recv(1024).decode()
-        print("Server Response:", response)
+HOST = '127.0.0.1'
+PORT = 12345
 
-if __name__ == "__main__":
+with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
+    s.connect((HOST, PORT))
+    print("Type message starting with A/C/D or anything else to test:")
     while True:
-        msg = input("Enter command (A/C/D + string): ")
-        if msg.lower() == "exit":
+        msg = input(">> ")
+        if msg.lower() == 'exit':
             break
-        send_message(msg)
+        s.sendall(msg.encode())
+        data = s.recv(1024).decode()
+        print("Server:", data)
